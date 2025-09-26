@@ -9,6 +9,6 @@
   />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { Upload } from '@progress/kendo-vue-upload';
 </script>

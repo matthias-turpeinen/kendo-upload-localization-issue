@@ -13,7 +13,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue';
 import ImportFiles from './ImportFiles.vue';
 import {
@@ -21,19 +21,21 @@ import {
   LocalizationProvider,
   loadMessages,
 } from '@progress/kendo-vue-intl';
-import { getMessages, LocaleInfo } from './fetchTranslations.ts';
+import { getMessages, type LocaleInfo } from './fetchTranslations';
 
 const defaultLanguage = 'en';
 
 const userLanguage = ref('');
 const userLocale = ref('');
-const messages = setLanguage(defaultLanguage);
 const localeInfo: LocaleInfo = getMessages(defaultLanguage);
 
-const setLanguage = (code = '') => {
+const setLanguage = (code: string = '') => {
   const { messages, locale, language } = getMessages(code);
   userLocale.value = locale;
   userLanguage.value = language;
   loadMessages(messages, language);
 };
+
+// Initialize with default language
+setLanguage(defaultLanguage);
 </script>
