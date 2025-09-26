@@ -2,32 +2,31 @@
   <div>
     <LocalizationProvider :language="userLanguage">
       <IntlProvider :locale="userLocale">
-        <!-- ImportFiles / -->
-        <div>
-          <p>Locale: {{ localeInfo.locale }}</p>
-          <p>Language: {{ localeInfo.language }}</p>
-          <p>Upload Cancel Label: {{ localeInfo.messages.upload.cancel }}</p>
-        </div>
+        <ChangeLang @languageChanged="onLanguageChange" />
+        <ImportFiles />
+        <InfoBlock :localeInfo="localeInfo" />
       </IntlProvider>
     </LocalizationProvider>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import ImportFiles from './ImportFiles.vue';
+import { ref, computed } from 'vue';
+import ImportFiles from './Components/ImportFiles.vue';
+import ChangeLang from './Components/ChangeLang.vue';
+import InfoBlock from './Components/InfoBlock.vue';
 import {
   IntlProvider,
   LocalizationProvider,
   loadMessages,
 } from '@progress/kendo-vue-intl';
-import { getMessages, type LocaleInfo } from './fetchTranslations';
+import { getMessages } from './fetchTranslations';
 
-const defaultLanguage = 'en';
+const defaultLanguage = ref('en');
 
 const userLanguage = ref('');
 const userLocale = ref('');
-const localeInfo: LocaleInfo = getMessages(defaultLanguage);
+const localeInfo = computed(() => getMessages(defaultLanguage.value));
 
 const setLanguage = (code: string = '') => {
   const { messages, locale, language } = getMessages(code);
@@ -36,6 +35,13 @@ const setLanguage = (code: string = '') => {
   loadMessages(messages, language);
 };
 
+// Handle language change from ChangeLang component
+const onLanguageChange = (newLanguage: string) => {
+  defaultLanguage.value = newLanguage;
+  setLanguage(newLanguage);
+};
+
 // Initialize with default language
-setLanguage(defaultLanguage);
+setLanguage(defaultLanguage.value);
 </script>
+
