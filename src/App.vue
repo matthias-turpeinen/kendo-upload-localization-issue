@@ -1,8 +1,8 @@
 <template>
   <div>
-    <LocalizationProvider :language="userLanguage.vale">
-      <IntlProvider :locale="userLocale.value">
-        <ImportFiles />
+    <LocalizationProvider :language="userLanguage">
+      <IntlProvider :locale="userLocale">
+        <!-- ImportFiles / -->
         <div>
           <p>Locale: {{ localeInfo.locale }}</p>
           <p>Language: {{ localeInfo.language }}</p>
@@ -14,7 +14,7 @@
 </template>
 
 <script setup>
-import { ref, onBeforeMount } from 'vue';
+import { ref } from 'vue';
 import ImportFiles from './ImportFiles.vue';
 import {
   IntlProvider,
@@ -28,7 +28,7 @@ const defaultLanguage = 'en';
 const userLanguage = ref('');
 const userLocale = ref('');
 const messages = setLanguage(defaultLanguage);
-const localeInfo: LocaleInfo = getMessages(userLang.value);
+const localeInfo: LocaleInfo = getMessages(defaultLanguage);
 
 const setLanguage = (code = '') => {
   const { messages, locale, language } = getMessages(code);
